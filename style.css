@@ -1,0 +1,339 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html,
+body {
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+}
+
+body {
+  background: linear-gradient(
+    180deg,
+    #fffbea 0%,
+    #fff8d6 50%,
+    #fff3b0 100%
+  );
+  position: relative;
+}
+
+/* ==============================
+   CANVAS
+============================== */
+
+#lienzoFlor {
+  position: fixed;
+  top: 0;
+  left: 0;
+
+  width: 100vw;
+  height: 100vh;
+
+  z-index: 1;
+
+  display: block;
+}
+
+
+/* ==============================
+   PANTALLA INICIAL
+============================== */
+
+.inicio {
+  position: fixed;
+
+  top: 50%;
+  left: 50%;
+
+  transform: translate(-50%, -50%);
+
+  z-index: 10;
+
+  width: min(90%, 500px);
+
+  text-align: center;
+
+  padding: 35px 30px;
+
+  background: rgba(255, 255, 255, 0.92);
+
+  border-radius: 24px;
+
+  box-shadow:
+    0 10px 30px rgba(0, 0, 0, 0.15);
+
+  transition:
+    opacity 0.5s ease,
+    transform 0.5s ease;
+}
+
+.inicio h1 {
+  font-size: 2.2rem;
+
+  color: #d39b00;
+
+  margin-bottom: 15px;
+}
+
+.inicio p {
+  font-size: 1.05rem;
+
+  color: #555;
+
+  line-height: 1.5;
+
+  margin-bottom: 25px;
+}
+
+
+/* ==============================
+   BOTÓN
+============================== */
+
+button {
+  border: none;
+
+  padding: 14px 30px;
+
+  border-radius: 999px;
+
+  background: #f5c518;
+
+  color: #4b3900;
+
+  font-size: 1rem;
+
+  font-weight: bold;
+
+  cursor: pointer;
+
+  box-shadow:
+    0 5px 15px rgba(0, 0, 0, 0.12);
+
+  transition:
+    transform 0.2s ease,
+    box-shadow 0.2s ease,
+    background 0.2s ease;
+}
+
+button:hover {
+  transform: scale(1.05);
+
+  box-shadow:
+    0 8px 20px rgba(0, 0, 0, 0.18);
+
+  background: #ffd633;
+}
+
+button:active {
+  transform: scale(0.98);
+}
+
+button:disabled {
+  cursor: default;
+
+  opacity: 0.75;
+}
+
+
+/* ==============================
+   TEXTO FINAL
+============================== */
+
+.texto-final {
+  display: none;
+
+  position: fixed;
+
+  left: 50%;
+  bottom: 28px;
+
+  transform: translateX(-50%);
+
+  z-index: 20;
+
+  width: min(88%, 520px);
+
+  text-align: center;
+
+  padding: 18px 22px;
+
+  background: rgba(255, 255, 255, 0.9);
+
+  border-radius: 20px;
+
+  box-shadow:
+    0 8px 25px rgba(0, 0, 0, 0.15);
+
+  backdrop-filter: blur(5px);
+  -webkit-backdrop-filter: blur(5px);
+}
+
+.texto-final h2 {
+  font-size: 1.35rem;
+
+  margin-bottom: 8px;
+
+  color: #2d5da8;
+}
+
+.mensaje {
+  font-size: 1rem;
+
+  line-height: 1.5;
+
+  color: #444;
+}
+
+
+/* ==============================
+   TABLET
+============================== */
+
+@media (max-width: 900px) {
+
+  .inicio {
+    width: 88%;
+
+    padding: 28px 22px;
+  }
+
+  .inicio h1 {
+    font-size: 1.9rem;
+  }
+
+  .inicio p {
+    font-size: 1rem;
+  }
+
+  .texto-final {
+    width: 86%;
+
+    bottom: 22px;
+  }
+}
+
+
+/* ==============================
+   CELULAR
+============================== */
+
+@media (max-width: 600px) {
+
+  body {
+    background: linear-gradient(
+      180deg,
+      #fffdf1 0%,
+      #fff8d6 55%,
+      #ffef9d 100%
+    );
+  }
+
+  .inicio {
+    width: 88%;
+
+    max-width: 360px;
+
+    padding: 22px 18px;
+
+    border-radius: 20px;
+  }
+
+  .inicio h1 {
+    font-size: 1.55rem;
+
+    margin-bottom: 12px;
+  }
+
+  .inicio p {
+    font-size: 0.92rem;
+
+    line-height: 1.4;
+
+    margin-bottom: 20px;
+  }
+
+  button {
+    padding: 12px 24px;
+
+    font-size: 0.95rem;
+  }
+
+  .texto-final {
+    width: 84%;
+
+    max-width: 330px;
+
+    bottom: 16px;
+
+    padding: 12px 14px;
+
+    border-radius: 16px;
+
+    background:
+      rgba(255, 255, 255, 0.92);
+  }
+
+  .texto-final h2 {
+    font-size: 1.05rem;
+
+    margin-bottom: 6px;
+  }
+
+  .mensaje {
+    font-size: 0.82rem;
+
+    line-height: 1.35;
+  }
+
+}
+
+
+/* ==============================
+   CELULARES PEQUEÑOS
+============================== */
+
+@media (max-width: 390px) {
+
+  .inicio {
+    width: 90%;
+
+    padding: 18px 14px;
+  }
+
+  .inicio h1 {
+    font-size: 1.35rem;
+  }
+
+  .inicio p {
+    font-size: 0.85rem;
+  }
+
+  button {
+    padding: 11px 20px;
+
+    font-size: 0.88rem;
+  }
+
+  .texto-final {
+    width: 88%;
+
+    bottom: 12px;
+
+    padding: 10px 12px;
+  }
+
+  .texto-final h2 {
+    font-size: 0.98rem;
+  }
+
+  .mensaje {
+    font-size: 0.76rem;
+  }
+
+}
