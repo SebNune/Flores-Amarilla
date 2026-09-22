@@ -1,1059 +1,463 @@
-document.addEventListener("DOMContentLoaded", () => {
+const boton = document.getElementById("botonAbrir");
+const inicio = document.querySelector(".inicio");
+const regalo = document.querySelector(".regalo");
 
-    // =========================================================
-    // ELEMENTOS
-    // =========================================================
+const canvas = document.getElementById("lienzoFlor");
+const ctx = canvas.getContext("2d");
 
-    const botonAbrir =
-        document.getElementById("botonAbrir");
+function ajustarCanvas() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+}
 
-    const inicio =
-        document.getElementById("inicio");
+ajustarCanvas();
+window.addEventListener("resize", ajustarCanvas);
 
-    const regalo =
-        document.getElementById("regalo");
+boton.addEventListener("click", () => {
+    inicio.style.display = "none";
+    regalo.classList.remove("oculto");
 
-    const canvas =
-        document.getElementById("lienzoFlor");
+    crearComposicion();
+});
 
-    const textoFinal =
-        document.getElementById("textoFinal");
-
-
-    if (
-        !botonAbrir ||
-        !inicio ||
-        !regalo ||
-        !canvas ||
-        !textoFinal
-    ) {
-
-        console.error(
-            "Falta algún elemento del HTML."
-        );
-
-        return;
-    }
+function esperar(ms) {
+    return new Promise(resolve => setTimeout(resolve, ms));
+}
 
 
-    const ctx =
-        canvas.getContext("2d");
+// ==========================
+// LINEA ESTILO TURTLE
+// ==========================
+async function dibujarLinea(
+    x1,
+    y1,
+    x2,
+    y2,
+    color,
+    grosor = 3
+) {
+    const pasos = 20;
 
+    let anteriorX = x1;
+    let anteriorY = y1;
 
-    let ancho =
-        window.innerWidth;
+    for (let i = 1; i <= pasos; i++) {
 
-    let alto =
-        window.innerHeight;
+        const progreso = i / pasos;
 
-
-    // =========================================================
-    // CANVAS
-    // =========================================================
-
-    function ajustarCanvas() {
-
-        const dpr =
-            window.devicePixelRatio || 1;
-
-        ancho =
-            window.innerWidth;
-
-        alto =
-            window.innerHeight;
-
-
-        canvas.width =
-            ancho * dpr;
-
-        canvas.height =
-            alto * dpr;
-
-
-        canvas.style.width =
-            ancho + "px";
-
-        canvas.style.height =
-            alto + "px";
-
-
-        ctx.setTransform(
-            dpr,
-            0,
-            0,
-            dpr,
-            0,
-            0
-        );
-    }
-
-
-    ajustarCanvas();
-
-
-    window.addEventListener(
-        "resize",
-        ajustarCanvas
-    );
-
-
-    // =========================================================
-    // UTILIDADES
-    // =========================================================
-
-    function esperar(ms) {
-
-        return new Promise(
-            resolve =>
-                setTimeout(resolve, ms)
-        );
-    }
-
-
-    function aleatorio(
-        min,
-        max
-    ) {
-
-        return (
-            Math.random() *
-            (max - min)
-            +
-            min
-        );
-    }
-
-
-    // =========================================================
-    // DIBUJAR TALLO
-    // =========================================================
-
-    function dibujarTallo(
-        x,
-        y,
-        escala
-    ) {
-
-        const largo =
-            38 * escala;
-
-
-        ctx.save();
-
+        const x = x1 + (x2 - x1) * progreso;
+        const y = y1 + (y2 - y1) * progreso;
 
         ctx.beginPath();
+        ctx.moveTo(anteriorX, anteriorY);
+        ctx.lineTo(x, y);
 
-        ctx.moveTo(
-            x,
-            y + 5 * escala
-        );
-
-
-        ctx.bezierCurveTo(
-
-            x - 4 * escala,
-            y + largo * 0.35,
-
-            x + 5 * escala,
-            y + largo * 0.7,
-
-            x,
-            y + largo
-        );
-
-
-        ctx.strokeStyle =
-            "#4F8A3A";
-
-        ctx.lineWidth =
-            3 * escala;
-
-        ctx.lineCap =
-            "round";
+        ctx.strokeStyle = color;
+        ctx.lineWidth = grosor;
+        ctx.lineCap = "round";
 
         ctx.stroke();
 
+        anteriorX = x;
+        anteriorY = y;
 
-        // HOJITA IZQUIERDA
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            x,
-            y + largo * 0.55
-        );
-
-        ctx.quadraticCurveTo(
-
-            x - 16 * escala,
-            y + largo * 0.45,
-
-            x - 19 * escala,
-            y + largo * 0.62
-        );
-
-        ctx.quadraticCurveTo(
-
-            x - 8 * escala,
-            y + largo * 0.67,
-
-            x,
-            y + largo * 0.55
-        );
-
-        ctx.fillStyle =
-            "#6FAF4B";
-
-        ctx.fill();
-
-
-        // HOJITA DERECHA
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            x,
-            y + largo * 0.72
-        );
-
-        ctx.quadraticCurveTo(
-
-            x + 17 * escala,
-            y + largo * 0.62,
-
-            x + 20 * escala,
-            y + largo * 0.78
-        );
-
-        ctx.quadraticCurveTo(
-
-            x + 8 * escala,
-            y + largo * 0.84,
-
-            x,
-            y + largo * 0.72
-        );
-
-        ctx.fillStyle =
-            "#5E9C42";
-
-        ctx.fill();
-
-
-        ctx.restore();
+        await esperar(1);
     }
+}
 
 
-    // =========================================================
-    // PÉTALO
-    // =========================================================
+// ==========================
+// PÉTALO AMARILLO
+// ==========================
+async function dibujarPetaloAmarillo(
+    cx,
+    cy,
+    angulo,
+    escala
+) {
+    const largo = 30 * escala;
+    const ancho = 13 * escala;
 
-    function dibujarPetalo(
+    const rad = angulo * Math.PI / 180;
+
+    ctx.save();
+
+    ctx.translate(cx, cy);
+    ctx.rotate(rad);
+
+    ctx.beginPath();
+
+    ctx.moveTo(0, 0);
+
+    ctx.bezierCurveTo(
+        ancho,
+        -10 * escala,
         largo,
-        anchoPetalo,
-        color
+        -10 * escala,
+        largo,
+        0
+    );
+
+    ctx.bezierCurveTo(
+        largo,
+        10 * escala,
+        ancho,
+        10 * escala,
+        0,
+        0
+    );
+
+    ctx.fillStyle = "#FFD52A";
+    ctx.fill();
+
+    ctx.strokeStyle = "#E1A600";
+    ctx.lineWidth = 1.2;
+
+    ctx.stroke();
+
+    ctx.restore();
+
+    await esperar(8);
+}
+
+
+// ==========================
+// FLOR AMARILLA COMPLETA
+// ==========================
+async function dibujarFlorAmarilla(
+    x,
+    y,
+    escala
+) {
+    const altoTallo =
+        50 +
+        Math.random() * 80;
+
+    const baseY = Math.min(
+        canvas.height,
+        y + altoTallo
+    );
+
+    // tallo
+    await dibujarLinea(
+        x,
+        baseY,
+        x,
+        y + 5,
+        "#3D8B37",
+        3 * escala
+    );
+
+    // pétalos
+    for (
+        let angulo = 0;
+        angulo < 360;
+        angulo += 45
     ) {
-
-        ctx.beginPath();
-
-        ctx.moveTo(
-            0,
-            0
+        await dibujarPetaloAmarillo(
+            x,
+            y,
+            angulo,
+            escala
         );
-
-
-        ctx.bezierCurveTo(
-
-            largo * 0.30,
-            -anchoPetalo,
-
-            largo * 0.75,
-            -anchoPetalo,
-
-            largo,
-            0
-        );
-
-
-        ctx.bezierCurveTo(
-
-            largo * 0.75,
-            anchoPetalo,
-
-            largo * 0.30,
-            anchoPetalo,
-
-            0,
-            0
-        );
-
-
-        ctx.closePath();
-
-
-        ctx.fillStyle =
-            color;
-
-        ctx.fill();
     }
 
+    // centro
+    ctx.beginPath();
 
-    // =========================================================
-    // FLOR AMARILLA
-    // =========================================================
-
-    async function dibujarFlorAmarilla(
+    ctx.arc(
         x,
         y,
-        escala = 1
+        10 * escala,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = "#7A4B20";
+    ctx.fill();
+
+    await esperar(5);
+}
+
+
+// ==========================
+// CLAVEL AZUL
+// ==========================
+async function dibujarClavelAzul(
+    x,
+    y,
+    escala
+) {
+    await dibujarLinea(
+        x,
+        y + 38 * escala,
+        x,
+        y + 8,
+        "#2E7D32",
+        2.2 * escala
+    );
+
+    const capas = [
+        {
+            radio: 22,
+            cantidad: 11,
+            tamano: 8
+        },
+        {
+            radio: 16,
+            cantidad: 10,
+            tamano: 8
+        },
+        {
+            radio: 10,
+            cantidad: 8,
+            tamano: 7
+        }
+    ];
+
+    for (const capa of capas) {
+
+        for (
+            let i = 0;
+            i < capa.cantidad;
+            i++
+        ) {
+
+            const angulo =
+                (Math.PI * 2 / capa.cantidad) * i;
+
+            const px =
+                x +
+                Math.cos(angulo) *
+                capa.radio *
+                escala;
+
+            const py =
+                y +
+                Math.sin(angulo) *
+                capa.radio *
+                escala;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                px,
+                py,
+                capa.tamano * escala,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fillStyle = "#2F6BFF";
+            ctx.fill();
+
+            ctx.strokeStyle = "#1744B5";
+            ctx.lineWidth = 1;
+
+            ctx.stroke();
+
+            await esperar(3);
+        }
+    }
+
+    ctx.beginPath();
+
+    ctx.arc(
+        x,
+        y,
+        9 * escala,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle = "#2456D8";
+    ctx.fill();
+}
+
+
+// ==========================
+// PUNTOS DEL CORAZÓN
+// ==========================
+function obtenerPuntosCorazon(
+    centroX,
+    centroY,
+    escala
+) {
+    const puntos = [];
+
+    for (
+        let t = 0;
+        t < Math.PI * 2;
+        t += 0.22
     ) {
 
-        // TALLO PRIMERO
-        // para que la flor quede encima
+        const x =
+            16 *
+            Math.pow(
+                Math.sin(t),
+                3
+            );
 
-        dibujarTallo(
+        const y =
+            13 * Math.cos(t)
+            - 5 * Math.cos(2 * t)
+            - 2 * Math.cos(3 * t)
+            - Math.cos(4 * t);
+
+        puntos.push({
+            x:
+                centroX +
+                x * escala,
+
+            y:
+                centroY -
+                y * escala
+        });
+    }
+
+    return puntos;
+}
+
+
+// ==========================
+// MUCHAS FLORES AMARILLAS
+// ==========================
+async function crearFloresAmarillas() {
+
+    const cantidad =
+        window.innerWidth < 600
+            ? 50
+            : 80;
+
+    const centroX =
+        canvas.width / 2;
+
+    const centroY =
+        canvas.height / 2 - 10;
+
+    const zonaCorazon =
+        Math.min(
+            canvas.width,
+            canvas.height
+        ) *
+        (
+            window.innerWidth < 600
+                ? 0.24
+                : 0.21
+        );
+
+    let creadas = 0;
+
+    let intentos = 0;
+
+    while (
+        creadas < cantidad &&
+        intentos < cantidad * 20
+    ) {
+
+        intentos++;
+
+        const x =
+            25 +
+            Math.random() *
+            (canvas.width - 50);
+
+        const y =
+            25 +
+            Math.random() *
+            (canvas.height - 120);
+
+        const distancia =
+            Math.sqrt(
+                Math.pow(
+                    x - centroX,
+                    2
+                ) +
+                Math.pow(
+                    y - centroY,
+                    2
+                )
+            );
+
+        // dejamos libre la zona del corazón
+        if (distancia < zonaCorazon) {
+            continue;
+        }
+
+        const escala =
+            0.45 +
+            Math.random() * 0.45;
+
+        await dibujarFlorAmarilla(
             x,
             y,
             escala
         );
 
+        creadas++;
 
-        ctx.save();
-
-
-        ctx.translate(
-            x,
-            y
-        );
-
-
-        ctx.rotate(
-            aleatorio(
-                -0.25,
-                0.25
-            )
-        );
-
-
-        const petalos =
-            10;
-
-
-        // CAPA EXTERIOR
-
-        for (
-            let i = 0;
-            i < petalos;
-            i++
-        ) {
-
-            ctx.save();
-
-
-            ctx.rotate(
-
-                (
-                    Math.PI *
-                    2 /
-                    petalos
-                )
-                *
-                i
-            );
-
-
-            dibujarPetalo(
-
-                26 * escala,
-
-                7.5 * escala,
-
-                "#FFD42A"
-            );
-
-
-            ctx.restore();
-        }
-
-
-        // CAPA INTERIOR
-
-        for (
-            let i = 0;
-            i < petalos;
-            i++
-        ) {
-
-            ctx.save();
-
-
-            ctx.rotate(
-
-                (
-                    Math.PI *
-                    2 /
-                    petalos
-                )
-                *
-                i
-
-                +
-
-                Math.PI /
-                petalos
-            );
-
-
-            dibujarPetalo(
-
-                18 * escala,
-
-                5.5 * escala,
-
-                "#FFE76A"
-            );
-
-
-            ctx.restore();
-        }
-
-
-        // CENTRO
-
-        ctx.beginPath();
-
-        ctx.arc(
-
-            0,
-            0,
-
-            8 * escala,
-
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.fillStyle =
-            "#9A6218";
-
-        ctx.fill();
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-
-            0,
-            0,
-
-            4.5 * escala,
-
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.fillStyle =
-            "#633A0D";
-
-        ctx.fill();
-
-
-        ctx.restore();
+        await esperar(4);
     }
+}
 
 
-    // =========================================================
-    // FLOR AZUL
-    // =========================================================
+// ==========================
+// CORAZÓN DE CLAVELES AZULES
+// ==========================
+async function crearCorazonAzul() {
 
-    async function dibujarFlorAzul(
-        x,
-        y,
-        escala = 1
-    ) {
+    const centroX =
+        canvas.width / 2;
 
-        ctx.save();
+    const centroY =
+        canvas.height / 2 - 15;
 
+    const escalaCorazon =
+        window.innerWidth < 600
+            ? 6.5
+            : 10;
 
-        ctx.translate(
-            x,
-            y
+    const puntos =
+        obtenerPuntosCorazon(
+            centroX,
+            centroY,
+            escalaCorazon
         );
 
+    for (const punto of puntos) {
 
-        ctx.rotate(
-            aleatorio(
-                -0.35,
-                0.35
-            )
+        await dibujarClavelAzul(
+            punto.x,
+            punto.y,
+            window.innerWidth < 600
+                ? 0.5
+                : 0.65
         );
 
-
-        const petalos =
-            8;
-
-
-        for (
-            let i = 0;
-            i < petalos;
-            i++
-        ) {
-
-            ctx.save();
-
-
-            ctx.rotate(
-
-                (
-                    Math.PI *
-                    2 /
-                    petalos
-                )
-                *
-                i
-            );
-
-
-            dibujarPetalo(
-
-                18 * escala,
-
-                5.5 * escala,
-
-                "#3D9BEA"
-            );
-
-
-            ctx.restore();
-        }
-
-
-        for (
-            let i = 0;
-            i < petalos;
-            i++
-        ) {
-
-            ctx.save();
-
-
-            ctx.rotate(
-
-                (
-                    Math.PI *
-                    2 /
-                    petalos
-                )
-                *
-                i
-
-                +
-
-                Math.PI /
-                petalos
-            );
-
-
-            dibujarPetalo(
-
-                12 * escala,
-
-                4 * escala,
-
-                "#82CEFF"
-            );
-
-
-            ctx.restore();
-        }
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-
-            0,
-            0,
-
-            5.5 * escala,
-
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.fillStyle =
-            "#1A568E";
-
-        ctx.fill();
-
-
-        ctx.beginPath();
-
-        ctx.arc(
-
-            0,
-            0,
-
-            2.8 * escala,
-
-            0,
-            Math.PI * 2
-        );
-
-
-        ctx.fillStyle =
-            "#092E54";
-
-        ctx.fill();
-
-
-        ctx.restore();
+        await esperar(5);
     }
-
-
-    // =========================================================
-    // FLORES AMARILLAS
-    // =========================================================
-
-    async function crearFloresAmarillas() {
-
-        const esMovil =
-            ancho <= 600;
-
-
-        // TU CONFIGURACIÓN ORIGINAL
-        // 85 EN PC
-
-        const cantidad =
-            esMovil
-                ? 45
-                : 85;
-
-
-        const centroX =
-            ancho / 2;
-
-
-        const centroY =
-            esMovil
-                ? alto * 0.38
-                : alto / 2 - 10;
-
-
-        const zonaCorazon =
-
-            Math.min(
-                ancho,
-                alto
-            )
-
-            *
-
-            (
-                esMovil
-                    ? 0.27
-                    : 0.22
-            );
-
-
-        let creadas =
-            0;
-
-        let intentos =
-            0;
-
-
-        while (
-
-            creadas <
-            cantidad
-
-            &&
-
-            intentos <
-            cantidad * 30
-
-        ) {
-
-            intentos++;
-
-
-            const margenX =
-                esMovil
-                    ? 28
-                    : 20;
-
-
-            const margenSuperior =
-                esMovil
-                    ? 30
-                    : 20;
-
-
-            // Dejamos bastante espacio
-            // para mensaje abajo
-
-            const margenInferior =
-                esMovil
-                    ? 150
-                    : 110;
-
-
-            const x =
-
-                margenX
-
-                +
-
-                Math.random()
-
-                *
-
-                (
-                    ancho
-                    -
-                    margenX * 2
-                );
-
-
-            const y =
-
-                margenSuperior
-
-                +
-
-                Math.random()
-
-                *
-
-                (
-                    alto
-                    -
-                    margenSuperior
-                    -
-                    margenInferior
-                );
-
-
-            const distancia =
-                Math.sqrt(
-
-                    Math.pow(
-                        x - centroX,
-                        2
-                    )
-
-                    +
-
-                    Math.pow(
-                        y - centroY,
-                        2
-                    )
-                );
-
-
-            // CENTRO LIBRE
-
-            if (
-                distancia <
-                zonaCorazon
-            ) {
-
-                continue;
-            }
-
-
-            const escala =
-
-                esMovil
-
-                    ?
-
-                    0.46
-                    +
-                    Math.random()
-                    *
-                    0.28
-
-                    :
-
-                    0.6
-                    +
-                    Math.random()
-                    *
-                    0.55;
-
-
-            await dibujarFlorAmarilla(
-
-                x,
-                y,
-                escala
-            );
-
-
-            creadas++;
-
-
-            await esperar(
-                esMovil
-                    ? 6
-                    : 2
-            );
-        }
-    }
-
-
-    // =========================================================
-    // CORAZÓN AZUL
-    // =========================================================
-
-    async function crearCorazonAzul() {
-
-        const esMovil =
-            ancho <= 600;
-
-
-        const centroX =
-            ancho / 2;
-
-
-        const centroY =
-            esMovil
-
-                ? alto * 0.36
-
-                : alto * 0.40;
-
-
-        const escalaCorazon =
-
-            Math.min(
-                ancho,
-                alto
-            )
-
-            *
-
-            (
-                esMovil
-                    ? 0.0087
-                    : 0.0105
-            );
-
-
-        const cantidad =
-            esMovil
-                ? 22
-                : 30;
-
-
-        for (
-            let i = 0;
-            i < cantidad;
-            i++
-        ) {
-
-            const t =
-
-                (
-                    Math.PI
-                    *
-                    2
-                    *
-                    i
-                )
-
-                /
-
-                cantidad;
-
-
-            const hx =
-
-                16
-
-                *
-
-                Math.pow(
-                    Math.sin(t),
-                    3
-                );
-
-
-            const hy =
-
-                13 *
-                Math.cos(t)
-
-                -
-
-                5 *
-                Math.cos(2 * t)
-
-                -
-
-                2 *
-                Math.cos(3 * t)
-
-                -
-
-                Math.cos(4 * t);
-
-
-            const x =
-
-                centroX
-
-                +
-
-                hx *
-                escalaCorazon;
-
-
-            const y =
-
-                centroY
-
-                -
-
-                hy *
-                escalaCorazon;
-
-
-            await dibujarFlorAzul(
-
-                x,
-                y,
-
-                esMovil
-                    ? 0.58
-                    : 0.70
-            );
-
-
-            await esperar(
-                35
-            );
-        }
-    }
-
-
-    // =========================================================
-    // INICIAR REGALO
-    // =========================================================
-
-    async function iniciarRegalo() {
-
-        botonAbrir.disabled =
-            true;
-
-
-        // Desvanecer inicio
-
-        inicio.style.opacity =
-            "0";
-
-
-        await esperar(
-            450
-        );
-
-
-        inicio.classList.add(
-            "oculto"
-        );
-
-
-        regalo.classList.remove(
-            "oculto"
-        );
-
-
-        ajustarCanvas();
-
-
-        // LIMPIAR
-
-        ctx.clearRect(
-
-            0,
-            0,
-            ancho,
-            alto
-        );
-
-
-        // ocultar texto mientras dibuja
-
-        textoFinal.classList.add(
-            "oculto"
-        );
-
-
-        // FLORES AMARILLAS
-
-        await crearFloresAmarillas();
-
-
-        await esperar(
-            250
-        );
-
-
-        // CORAZÓN
-
-        await crearCorazonAzul();
-
-
-        await esperar(
-            400
-        );
-
-
-        // MENSAJE FINAL
-
-        textoFinal.classList.remove(
-            "oculto"
-        );
-
-
-        textoFinal.style.opacity =
-            "0";
-
-
-        textoFinal.style.transform =
-            "translateX(-50%) translateY(15px)";
-
-
-        requestAnimationFrame(
-            () => {
-
-                textoFinal.style.transition =
-                    "opacity 1s ease, transform 1s ease";
-
-
-                textoFinal.style.opacity =
-                    "1";
-
-
-                textoFinal.style.transform =
-                    "translateX(-50%) translateY(0)";
-            }
-        );
-    }
-
-
-    // =========================================================
-    // BOTÓN
-    // =========================================================
-
-    botonAbrir.addEventListener(
-        "click",
-        iniciarRegalo
+}
+
+
+// ==========================
+// COMPOSICIÓN COMPLETA
+// ==========================
+async function crearComposicion() {
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
     );
 
-});
+    // Primero llenamos la pantalla
+    // de flores amarillas
+    await crearFloresAmarillas();
+
+    await esperar(300);
+
+    // Después aparece
+    // el corazón azul
+    await crearCorazonAzul();
+}
