@@ -244,9 +244,22 @@ button:active {
   }
 
   .texto-final {
-    bottom: 12px;
+    position: fixed;
+
+    left: 50%;
+
+    bottom: calc(
+      85px + env(safe-area-inset-bottom)
+    );
+
+    transform: translateX(-50%);
+
+    width: 88%;
+    max-width: 340px;
 
     padding: 14px 16px;
+
+    z-index: 9999;
   }
 
   .texto-final h2 {
