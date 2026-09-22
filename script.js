@@ -4,11 +4,11 @@ document.addEventListener("DOMContentLoaded", () => {
   // ELEMENTOS
   // =====================================================
 
-  const botonAbrir = document.getElementById("botonAbrir");
-  const inicio = document.getElementById("inicio");
-  const regalo = document.getElementById("regalo");
-  const canvas = document.getElementById("lienzoFlor");
-  const textoFinal = document.getElementById("textoFinal");
+const botonAbrir = document.getElementById("botonAbrir");
+const inicio = document.querySelector(".inicio");
+const regalo = document.querySelector(".regalo");
+const canvas = document.getElementById("lienzoFlor");
+const textoFinal = document.querySelector(".texto-final");
 
   if (!botonAbrir || !inicio || !regalo || !canvas || !textoFinal) {
     console.error("Falta uno de los elementos necesarios en el HTML.");
