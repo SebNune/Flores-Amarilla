@@ -3,11 +3,7 @@
 
 <head>
   <meta charset="UTF-8">
-
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1.0"
-  >
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
   <title>Flores Amarillas 💛</title>
 
@@ -16,40 +12,45 @@
 
 <body>
 
-  <!-- Pantalla inicial -->
-  <div class="inicio">
+  <section id="inicio" class="inicio">
 
-    <h1>Flores Amarillas 💛</h1>
+    <div class="tarjeta-inicio">
 
-    <p>
-      Tengo algo pequeño para ti...
-    </p>
+      <h1>Flores Amarillas 💛</h1>
 
-    <button id="btnIniciar">
-      Ver sorpresa 🌻
-    </button>
+      <p>
+        Tengo algo pequeño para ti...
+      </p>
 
-  </div>
+      <button id="botonAbrir">
+        Ver sorpresa 🌼
+      </button>
 
+    </div>
 
-  <!-- Canvas donde se dibujan las flores -->
-  <canvas id="lienzoFlor"></canvas>
-
-
-  <!-- Mensaje que aparece al final -->
-  <div class="texto-final">
-
-    <h2>Para ti 💙</h2>
-
-    <p class="mensaje">
-      En medio de todas estas flores amarillas,
-      un pequeño corazón de flores azules para ti 💙
-    </p>
-
-  </div>
+  </section>
 
 
-  <script src="script.js"></script>
+  <section id="regalo" class="regalo oculto">
+
+    <canvas id="lienzoFlor"></canvas>
+
+    <div id="textoFinal" class="texto-final oculto">
+
+      <h2>Para ti 💙</h2>
+
+      <p>
+        En medio de todas estas flores amarillas,
+        un pequeño corazón de flores azules para ti.
+      </p>
+
+    </div>
+
+  </section>
+
+
+  <!-- v=10 evita que el navegador use JS antiguo -->
+  <script src="script.js?v=10"></script>
 
 </body>
 

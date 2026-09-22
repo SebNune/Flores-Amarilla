@@ -8,332 +8,239 @@ html,
 body {
   width: 100%;
   height: 100%;
-  overflow: hidden;
-  font-family: Arial, Helvetica, sans-serif;
 }
 
 body {
+  overflow: hidden;
+  font-family: Arial, Helvetica, sans-serif;
+
   background: linear-gradient(
     180deg,
-    #fffbea 0%,
-    #fff8d6 50%,
-    #fff3b0 100%
+    #fffdf0 0%,
+    #fff6c7 100%
   );
-  position: relative;
-}
-
-/* ==============================
-   CANVAS
-============================== */
-
-#lienzoFlor {
-  position: fixed;
-  top: 0;
-  left: 0;
-
-  width: 100vw;
-  height: 100vh;
-
-  z-index: 1;
-
-  display: block;
 }
 
 
-/* ==============================
-   PANTALLA INICIAL
-============================== */
+/* ==========================
+   INICIO
+========================== */
 
 .inicio {
   position: fixed;
 
-  top: 50%;
-  left: 50%;
+  inset: 0;
 
-  transform: translate(-50%, -50%);
+  display: flex;
+  justify-content: center;
+  align-items: center;
 
-  z-index: 10;
+  z-index: 20;
 
-  width: min(90%, 500px);
+  background: linear-gradient(
+    180deg,
+    #fffdf3,
+    #fff3b8
+  );
 
-  text-align: center;
+  transition: opacity 0.5s ease;
+}
 
-  padding: 35px 30px;
 
-  background: rgba(255, 255, 255, 0.92);
+.tarjeta-inicio {
+  width: min(90%, 420px);
+
+  padding: 32px 24px;
+
+  background: rgba(255, 255, 255, 0.95);
 
   border-radius: 24px;
 
+  text-align: center;
+
   box-shadow:
-    0 10px 30px rgba(0, 0, 0, 0.15);
-
-  transition:
-    opacity 0.5s ease,
-    transform 0.5s ease;
+    0 10px 30px rgba(0, 0, 0, 0.12);
 }
 
-.inicio h1 {
-  font-size: 2.2rem;
 
-  color: #d39b00;
+.tarjeta-inicio h1 {
+  font-size: 2rem;
 
-  margin-bottom: 15px;
+  color: #d49b00;
+
+  margin-bottom: 14px;
 }
 
-.inicio p {
-  font-size: 1.05rem;
 
+.tarjeta-inicio p {
   color: #555;
 
-  line-height: 1.5;
+  font-size: 1rem;
 
-  margin-bottom: 25px;
+  margin-bottom: 24px;
 }
 
 
-/* ==============================
+/* ==========================
    BOTÓN
-============================== */
+========================== */
 
 button {
   border: none;
 
-  padding: 14px 30px;
+  padding: 14px 28px;
 
   border-radius: 999px;
 
-  background: #f5c518;
+  background: #ffd633;
 
-  color: #4b3900;
-
-  font-size: 1rem;
+  color: #513c00;
 
   font-weight: bold;
 
-  cursor: pointer;
+  font-size: 1rem;
 
-  box-shadow:
-    0 5px 15px rgba(0, 0, 0, 0.12);
+  cursor: pointer;
 
   transition:
     transform 0.2s ease,
-    box-shadow 0.2s ease,
-    background 0.2s ease;
+    box-shadow 0.2s ease;
 }
+
 
 button:hover {
   transform: scale(1.05);
 
   box-shadow:
-    0 8px 20px rgba(0, 0, 0, 0.18);
-
-  background: #ffd633;
-}
-
-button:active {
-  transform: scale(0.98);
-}
-
-button:disabled {
-  cursor: default;
-
-  opacity: 0.75;
+    0 6px 18px rgba(0, 0, 0, 0.15);
 }
 
 
-/* ==============================
+/* ==========================
+   REGALO
+========================== */
+
+.regalo {
+  position: fixed;
+
+  inset: 0;
+
+  overflow: hidden;
+}
+
+
+.oculto {
+  display: none !important;
+}
+
+
+/* ==========================
+   CANVAS
+========================== */
+
+#lienzoFlor {
+  position: absolute;
+
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  display: block;
+
+  z-index: 1;
+}
+
+
+/* ==========================
    TEXTO FINAL
-============================== */
+========================== */
 
 .texto-final {
-  display: none;
-
   position: fixed;
 
   left: 50%;
-  bottom: 28px;
+  bottom: 22px;
 
   transform: translateX(-50%);
 
-  z-index: 20;
+  z-index: 10;
 
-  width: min(88%, 520px);
+  width: min(88%, 500px);
+
+  padding: 16px 20px;
 
   text-align: center;
 
-  padding: 18px 22px;
+  background: rgba(255, 255, 255, 0.95);
 
-  background: rgba(255, 255, 255, 0.9);
-
-  border-radius: 20px;
+  border-radius: 18px;
 
   box-shadow:
     0 8px 25px rgba(0, 0, 0, 0.15);
-
-  backdrop-filter: blur(5px);
-  -webkit-backdrop-filter: blur(5px);
 }
+
 
 .texto-final h2 {
-  font-size: 1.35rem;
+  color: #2365a7;
 
-  margin-bottom: 8px;
-
-  color: #2d5da8;
+  margin-bottom: 7px;
 }
 
-.mensaje {
-  font-size: 1rem;
 
-  line-height: 1.5;
-
+.texto-final p {
   color: #444;
+
+  line-height: 1.4;
 }
 
 
-/* ==============================
-   TABLET
-============================== */
-
-@media (max-width: 900px) {
-
-  .inicio {
-    width: 88%;
-
-    padding: 28px 22px;
-  }
-
-  .inicio h1 {
-    font-size: 1.9rem;
-  }
-
-  .inicio p {
-    font-size: 1rem;
-  }
-
-  .texto-final {
-    width: 86%;
-
-    bottom: 22px;
-  }
-}
-
-
-/* ==============================
+/* ==========================
    CELULAR
-============================== */
+========================== */
 
 @media (max-width: 600px) {
 
-  body {
-    background: linear-gradient(
-      180deg,
-      #fffdf1 0%,
-      #fff8d6 55%,
-      #ffef9d 100%
-    );
-  }
-
-  .inicio {
+  .tarjeta-inicio {
     width: 88%;
 
-    max-width: 360px;
-
-    padding: 22px 18px;
-
-    border-radius: 20px;
+    padding: 24px 18px;
   }
 
-  .inicio h1 {
+
+  .tarjeta-inicio h1 {
     font-size: 1.55rem;
-
-    margin-bottom: 12px;
   }
 
-  .inicio p {
-    font-size: 0.92rem;
 
-    line-height: 1.4;
-
-    margin-bottom: 20px;
+  .tarjeta-inicio p {
+    font-size: 0.9rem;
   }
+
 
   button {
-    padding: 12px 24px;
+    font-size: 0.9rem;
 
-    font-size: 0.95rem;
+    padding: 12px 22px;
   }
 
+
   .texto-final {
-    width: 84%;
+    bottom: 14px;
 
-    max-width: 330px;
-
-    bottom: 16px;
+    width: 86%;
 
     padding: 12px 14px;
-
-    border-radius: 16px;
-
-    background:
-      rgba(255, 255, 255, 0.92);
   }
+
 
   .texto-final h2 {
-    font-size: 1.05rem;
-
-    margin-bottom: 6px;
+    font-size: 1rem;
   }
 
-  .mensaje {
-    font-size: 0.82rem;
 
-    line-height: 1.35;
-  }
-
-}
-
-
-/* ==============================
-   CELULARES PEQUEÑOS
-============================== */
-
-@media (max-width: 390px) {
-
-  .inicio {
-    width: 90%;
-
-    padding: 18px 14px;
-  }
-
-  .inicio h1 {
-    font-size: 1.35rem;
-  }
-
-  .inicio p {
-    font-size: 0.85rem;
-  }
-
-  button {
-    padding: 11px 20px;
-
-    font-size: 0.88rem;
-  }
-
-  .texto-final {
-    width: 88%;
-
-    bottom: 12px;
-
-    padding: 10px 12px;
-  }
-
-  .texto-final h2 {
-    font-size: 0.98rem;
-  }
-
-  .mensaje {
-    font-size: 0.76rem;
+  .texto-final p {
+    font-size: 0.8rem;
   }
 
 }
