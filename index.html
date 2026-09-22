@@ -3,7 +3,11 @@
 
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <meta
+    name="viewport"
+    content="width=device-width, initial-scale=1.0"
+  >
 
   <title>Flores Amarillas 💛</title>
 
@@ -12,45 +16,59 @@
 
 <body>
 
-  <section id="inicio" class="inicio">
+  <main class="contenedor">
 
-    <div class="tarjeta-inicio">
+    <!-- Pantalla inicial -->
+    <section id="inicio" class="inicio">
 
-      <h1>Flores Amarillas 💛</h1>
+      <h1>
+        Tengo algo para ti 💛
+      </h1>
 
       <p>
-        Tengo algo pequeño para ti...
+        Como no puedo darte flores en persona...
       </p>
 
       <button id="botonAbrir">
-        Ver sorpresa 🌼
+        Ábrelo 🌼
       </button>
 
-    </div>
-
-  </section>
+    </section>
 
 
-  <section id="regalo" class="regalo oculto">
+    <!-- Regalo -->
+    <section id="regalo" class="regalo oculto">
 
-    <canvas id="lienzoFlor"></canvas>
-
-    <div id="textoFinal" class="texto-final oculto">
-
-      <h2>Para ti 💙</h2>
-
-      <p>
-        En medio de todas estas flores amarillas,
-        un pequeño corazón de flores azules para ti.
-      </p>
-
-    </div>
-
-  </section>
+      <canvas id="lienzoFlor"></canvas>
 
 
-  <!-- v=10 evita que el navegador use JS antiguo -->
-  <script src="script.js?v=10"></script>
+      <!-- Mensaje final -->
+      <div
+        id="textoFinal"
+        class="texto-final oculto"
+      >
+
+        <h2>
+          Feliz 21 de Septiembre Mely 💛
+        </h2>
+
+        <p class="mensaje">
+          En medio de estas flores amarillas,
+          un pequeño corazón de flores azules para ti 💙
+        </p>
+
+      </div>
+
+    </section>
+
+  </main>
+
+
+  <!--
+    El ?v=12 obliga al navegador a cargar
+    la versión nueva del JavaScript.
+  -->
+  <script src="script.js?v=12"></script>
 
 </body>
 
