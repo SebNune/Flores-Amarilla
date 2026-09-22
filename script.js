@@ -457,9 +457,22 @@ async function crearFloresAmarillas() {
         }
 
 
-        const escala =
-            0.55 +
-            Math.random() * 0.5;
+        const factorResponsive =
+    Math.min(
+        1,
+        window.innerWidth / 1366
+    );
+
+const escala =
+    (
+        0.55 +
+        Math.random() * 0.5
+    )
+    *
+    Math.max(
+        factorResponsive,
+        0.55
+    );
 
 
         await dibujarFlorAmarilla(
